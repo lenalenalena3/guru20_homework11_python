@@ -18,6 +18,7 @@ def setup_browser():
             "browserName": "chrome",
             "browserVersion": "128.0",
             "selenoid:options": {
+                "enableLog": True,
                 "enableVNC": True,
                 "enableVideo": False
             }
