@@ -9,7 +9,7 @@ from demoga_tests.model.application import app
 @allure.link("https://demoqa.com", name="demoqa.com")
 @allure.title("Форма сокращенной регистрации")
 @allure.description("Заполнение формы регистрации, отправка и проверка результата заполнения")
-def test_simple_forms_filling_and_submit(open_page_demoqa):
+def test_simple_forms_filling_and_submit(setup_browser):
     student = users_simpl.student_simpl
     with allure.step("Открытие страницы"):
         app.left_panel.open_simple_registration_form()

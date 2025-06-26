@@ -33,7 +33,6 @@ def setup_browser():
 def setup_browser():
     options = Options()
     options.page_load_strategy = 'eager'
-
     # Определяем, используется ли Selenoid
     use_selenoid = os.getenv('USE_SELENOID', 'false').lower() == 'true'
 
@@ -59,9 +58,7 @@ def setup_browser():
         driver_options.page_load_strategy = 'eager'
         browser.config.driver_options = driver_options
 
-    browser.config.driver = driver
     browser.config.base_url = 'https://demoqa.com'
-    browser.config.timeout = 10.0
 
     yield browser
 

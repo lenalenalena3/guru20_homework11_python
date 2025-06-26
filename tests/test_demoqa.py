@@ -12,7 +12,7 @@ from util import attach
 @allure.link("https://demoqa.com", name="demoqa.com")
 @allure.title("Форма регистрации")
 @allure.description("Заполнение формы регистрации, отправка и проверка результата заполнения")
-def test_forms_filling_and_submit(open_page_demoqa):
+def test_forms_filling_and_submit(setup_browser):
     registration_page = RegistrationPage()
     student = users.student
     with allure.step("Открытие страницы"):
