@@ -4,7 +4,7 @@ from selene import browser
 
 from demoga_tests.data import users
 from demoga_tests.model.pages.registration_page import RegistrationPage
-from util import attach
+from utils import attach
 
 
 @allure.severity(Severity.NORMAL)
