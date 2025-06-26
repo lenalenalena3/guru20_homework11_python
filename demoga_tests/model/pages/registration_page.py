@@ -1,3 +1,4 @@
+import allure
 from selene import browser, have
 from demoga_tests.model import resource
 
@@ -25,6 +26,7 @@ class RegistrationPage:
         self._city_elements = self._city.all('//div[contains(@id, "option")]')
         self._submit_button = browser.element('[id="submit"]')
 
+    @allure.step(f"Открыть форму регистрации")
     def open(self):
         browser.open('/automation-practice-form')
 
@@ -75,6 +77,7 @@ class RegistrationPage:
     def submit(self):
         self._submit_button.click()
 
+    @allure.step(f"Заполнить форму регистрации данными пользователя")
     def register(self, user):
         self._fill_first_name(user.first_name)
         self._fill_last_name(user.last_name)
@@ -90,6 +93,7 @@ class RegistrationPage:
         self._set_city(user.city)
         self.submit()
 
+    @allure.step(f"Проверить результирующую таблицу")
     def should_have_registered(self, user):
         year = str(user.date_of_birth.year)
         month = user.date_of_birth.strftime('%B')
