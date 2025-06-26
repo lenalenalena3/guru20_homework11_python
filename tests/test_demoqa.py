@@ -23,4 +23,4 @@ def test_forms_filling_and_submit(setup_browser):
         registration_page.should_have_registered(student)
         attach.add_html(browser)
         attach.add_screenshot(browser)
-        attach.add_logs(browser)
+        #attach.add_logs(browser)
