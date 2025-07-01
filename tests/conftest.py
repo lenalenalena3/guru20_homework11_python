@@ -1,16 +1,17 @@
-import os
-
 import pytest
 from selene import browser
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from demoga_tests.model.browser_settings import is_selenoid_enabled
+from utils import attach
+
 
 @pytest.fixture(scope="function")
 def setup_browser():
     options = Options()
     options.page_load_strategy = 'eager'
     # Определяем, используется ли Selenoid
-    use_selenoid = os.getenv('USE_SELENOID', 'false').lower() == 'true'
+    use_selenoid = is_selenoid_enabled()
     print(f" selenoid: {use_selenoid}")
     if use_selenoid:
         # Конфигурация для Selenoid
@@ -20,8 +21,9 @@ def setup_browser():
             "selenoid:options": {
                 "enableLog": True,
                 "enableVNC": True,
-                "enableVideo": False
-            }
+                "enableVideo": True
+            },
+            "goog:loggingPrefs": {"browser": "ALL"}
         }
         options.capabilities.update(selenoid_capabilities)
 
@@ -39,5 +41,8 @@ def setup_browser():
     browser.config.base_url = 'https://demoqa.com'
 
     yield browser
-
+    attach.add_screenshot(browser)
+    attach.add_logs(browser)
+    attach.add_html(browser)
+    # attach.add_video(browser)
     browser.quit()

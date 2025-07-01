@@ -1,10 +1,8 @@
 import allure
 from allure_commons.types import Severity
-from selene import browser
 
 from demoga_tests.data import users
 from demoga_tests.model.pages.registration_page import RegistrationPage
-from utils import attach
 
 
 @allure.severity(Severity.NORMAL)
@@ -21,6 +19,3 @@ def test_forms_filling_and_submit(setup_browser):
         registration_page.register(student)
     with allure.step(f"Проверка результативной таблицы {student}"):
         registration_page.should_have_registered(student)
-        attach.add_html(browser)
-        attach.add_screenshot(browser)
-        attach.add_logs(browser)
