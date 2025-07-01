@@ -31,13 +31,12 @@ def setup_browser():
             command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
             options=options
         )
-        browser.config.driver = driver
     else:
         # Локальная конфигурация
         driver_options = webdriver.ChromeOptions()
         driver_options.page_load_strategy = 'eager'
-        browser.config.driver_options = driver_options
-
+        driver = webdriver.Chrome(options=driver_options)
+    browser.config.driver = driver
     browser.config.base_url = 'https://demoqa.com'
 
     yield browser
@@ -45,4 +44,4 @@ def setup_browser():
     attach.add_logs(browser)
     attach.add_html(browser)
     # attach.add_video(browser)
-    browser.quit()
+    driver.quit()

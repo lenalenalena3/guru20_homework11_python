@@ -13,7 +13,7 @@ def add_screenshot(browser):
 def add_logs(browser):
     try:
         if is_selenoid_enabled():
-            logs = browser.execute("getLog", {"type": 'browser'})["value"]
+            logs = browser.driver.execute("getLog", {"type": 'browser'})["value"]
         else:
             logs = browser.driver.get_log('browser')
         log_text = "\n".join(str(log) for log in logs)
@@ -30,8 +30,11 @@ def add_html(browser):
 
 def add_video(browser):
     # video_url = f"{selenoid_url}/video/" + browser.driver.session_id + ".mp4"
-    video_url = "https://user1:1234@selenoid.autotests.cloud/wd/hub/video/" + browser.driver.session_id + ".mp4"
-    html = "<html><body><video width='100%' height='100%' controls autoplay><source src='" \
-           + video_url \
-           + "' type='video/mp4'></video></body></html>"
-    allure.attach(html, 'video_' + browser.driver.session_id, AttachmentType.HTML, '.html')
+    if is_selenoid_enabled():
+        video_url = "https://selenoid.autotests.cloud/video/" + browser.session_id + ".mp4"
+        html = "<html><body><video width='100%' height='100%' controls autoplay><source src='" \
+               + video_url \
+               + "' type='video/mp4'></video></body></html>"
+        allure.attach(html, 'video_' + browser.session_id, AttachmentType.HTML, '.html')
+    else:
+        print("Видео недоступно")
