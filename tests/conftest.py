@@ -4,15 +4,23 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from demoga_tests.model.browser_settings import is_selenoid_enabled
 from utils import attach
+from dotenv import load_dotenv
+import os
+
+
+@pytest.fixture(scope="session", autouse=True)
+def load_env():
+    load_dotenv()
 
 
 @pytest.fixture(scope="function")
 def setup_browser():
     options = Options()
     options.page_load_strategy = 'eager'
+    options.add_argument("--window-size=1280,1080")
     # Определяем, используется ли Selenoid
     use_selenoid = is_selenoid_enabled()
-    print(f" selenoid: {use_selenoid}")
+    print(f" Selenoid: {use_selenoid}")
     if use_selenoid:
         # Конфигурация для Selenoid
         selenoid_capabilities = {
@@ -27,21 +35,25 @@ def setup_browser():
         }
         options.capabilities.update(selenoid_capabilities)
 
+        selenoid_login = os.getenv("SELENOID_LOGIN")
+        selenoid_pass = os.getenv("SELENOID_PASS")
+        selenoid_url = os.getenv("SELENOID_URL")
+        print(f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}")
         driver = webdriver.Remote(
-            command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
+            command_executor=f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}/wd/hub",
             options=options
         )
     else:
-        # Локальная конфигурация
-        driver_options = webdriver.ChromeOptions()
-        driver_options.page_load_strategy = 'eager'
-        driver = webdriver.Chrome(options=driver_options)
+        driver = webdriver.Chrome(options=options)
+
     browser.config.driver = driver
     browser.config.base_url = 'https://demoqa.com'
+    print(f"Установленный размер окна: {driver.get_window_size()}")
 
     yield browser
     attach.add_screenshot(browser)
     attach.add_logs(browser)
     attach.add_html(browser)
-    # attach.add_video(browser)
+    if use_selenoid:
+        attach.add_video(browser, os.getenv(f"https://{selenoid_url}"))
     driver.quit()

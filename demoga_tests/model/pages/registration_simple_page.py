@@ -18,6 +18,7 @@ class RegistrationSimplePage:
         self._email.type(user.email)
         self._current_address.type(user.current_address)
         self._permanent_address.type(user.permanent_address)
+        browser.execute_script("arguments[0].scrollIntoView(true);", self.submit_button.locate())
         self.submit_button.click()
 
     def should_have_registered(self, user):
