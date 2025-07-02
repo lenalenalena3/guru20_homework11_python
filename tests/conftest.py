@@ -38,7 +38,6 @@ def setup_browser():
         selenoid_login = os.getenv("SELENOID_LOGIN")
         selenoid_pass = os.getenv("SELENOID_PASS")
         selenoid_url = os.getenv("SELENOID_URL")
-        print(f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}")
         driver = webdriver.Remote(
             command_executor=f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}/wd/hub",
             options=options
@@ -55,5 +54,5 @@ def setup_browser():
     attach.add_logs(browser)
     attach.add_html(browser)
     if use_selenoid:
-        attach.add_video(browser, os.getenv(f"https://{selenoid_url}"))
+        attach.add_video(browser, selenoid_url)
     driver.quit()
